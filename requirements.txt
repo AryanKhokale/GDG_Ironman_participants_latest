@@ -5,3 +5,5 @@ alembic
 python-dotenv
 fastapi
 uvicorn
+cloudinary
+requests

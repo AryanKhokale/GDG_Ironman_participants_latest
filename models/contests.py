@@ -5,7 +5,7 @@ from .dependency import Base
 class Contest(Base):
     __tablename__ = "contests"
 
-    contest_id = Column(Text, primary_key=True, index=True)
+    contest_id = Column(Text, primary_key=True, index=True) # Team_Nmae
 
     description = Column(Text, nullable=True)
 
@@ -16,3 +16,5 @@ class Contest(Base):
     created_at = Column(Date, nullable=True)
 
     
+# __tablename__ = "round5"
+

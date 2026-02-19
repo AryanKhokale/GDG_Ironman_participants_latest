@@ -1,5 +1,6 @@
+from typing import List
 from datetime import datetime
-from fastapi import APIRouter, Depends, FastAPI, Body
+from fastapi import APIRouter, Depends, FastAPI, Body, Form, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_db
 from models.model import Registration
@@ -7,12 +8,19 @@ from models.contests import Contest
 from models.probelms import Problem
 from service.registration_service import registration_service
 from service.contest_service import create_contest
+from service.round_2_service import submit_round_2_service
+from service.round_3_service import submit_round_3_service
 from service.submission_service import submission_service
 from service.problems_service import create_problem
 from schemas.problem_schema import ProblemCreate
 from schemas.contest_schema import ContestCreate
 from schemas.registration_schema import RegistrationCreate
 from schemas.submission_schema import Submission
+from schemas.round_5_schema import Round_5_Submit
+from service.round_5_service import submit_round_5_service
+from service.problems_service import get_problem_by_id
+from schemas.round_4_schema import Round_4_Submit
+from service.round_4_service import submit_round_4_service
 
 
 
@@ -76,6 +84,102 @@ async def api_new_submission(
         submission.code,
         submission.status
     )
+@app.post("/round_5")
+async def submit_round_5_endpoint(
+    Team_Name: str = Form(...),
+    abstract: str = Form(...),
+    score_5: int = Form(...),
+    files: List[UploadFile] = File(...),
+    db: AsyncSession = Depends(get_db)
+):
+
+    event, uploaded_urls = await submit_round_5_service(
+        db=db,
+        Team_Name=Team_Name,
+        abstract=abstract,
+        score_5=score_5,
+        files=files
+    )
+
+    return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }
+
+
+@app.post("/round_2")
+async def submit_round_2_endpoint(
+    Team_Name: str = Form(...),
+    git_hub_link: str = Form(...),
+    hosted_link: str = Form(...),
+    files: List[UploadFile] = File(...),
+    db: AsyncSession = Depends(get_db)
+):
+
+    event, uploaded_urls = await submit_round_2_service(
+        db=db,
+        Team_Name=Team_Name,
+        git_hub_link=git_hub_link,
+        hosted_link=hosted_link,
+        status="Submitted",
+            score_2=0,
+        files=files
+    )
+
+    return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }
+
+
+@app.post("/round_3")
+async def submit_round_3_endpoint(
+    Team_Name: str = Form(...),
+    figma_links: str = Form(...),
+    description: str = Form(...),
+    files: List[UploadFile] = File(...),
+    db: AsyncSession = Depends(get_db)
+):
+
+    event, uploaded_urls = await submit_round_3_service(
+        db=db,
+        Team_Name=Team_Name,
+        figma_links=figma_links,
+        description=description,
+        status_3='Submitted',
+        score_3=0,
+        files=files
+    )
+
+   
+    return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }
+
+@app.post("/round_4")
+async def submit_round_4_endpoint(
+    round_4: Round_4_Submit,
+    db: AsyncSession = Depends(get_db)
+):
+
+    event = await submit_round_4_service(
+        db=db,
+        Team_Name=round_4.Team_Name,
+        structured_submission=round_4.structured_submission,
+        status_4=round_4.status_4,
+        question=round_4.question,
+        score_4=round_4.score_4
+    )
+
+    return {
+        "message": "Submitted successfully",
+        "event": event
+    }
+#@app.post("/judge")
+#async def judg(scoring : AdminCreate, db: AsyncSession = Depends(get_db)):
+#    res = await admin_service(scoring.Team_Name, score=scoring.score, db=db)
+#    return res
 
 
 
@@ -97,3 +201,6 @@ async def api_new_submission(
 #                {"name": "Jane", "role": "member", "email" : "jane@example.com"}
 #
 #            ]
+
+
+# prc_code + user_code + post_code
