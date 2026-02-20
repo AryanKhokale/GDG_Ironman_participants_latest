@@ -1,6 +1,6 @@
 
 from sqlalchemy import Column, Integer, Text
-from .dependency import Base
+from core.dependency import Base
 
 
 class Round_5(Base):

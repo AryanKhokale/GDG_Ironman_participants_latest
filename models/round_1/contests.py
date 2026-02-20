@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Text, TIMESTAMP, Date
-from .dependency import Base
+from core.dependency import Base
 
 
 class Contest(Base):

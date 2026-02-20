@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.postgresql import JSONB
-from .dependency import Base
+from core.dependency import Base
 
 class Round_3(Base):
     __tablename__ = "round_3"

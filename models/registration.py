@@ -1,7 +1,7 @@
 from sqlalchemy.orm import  mapped_column
 from sqlalchemy import Text
 from sqlalchemy.dialects.postgresql import JSONB
-from .dependency import Base
+from core.dependency import Base
 
 
 class Registration(Base):

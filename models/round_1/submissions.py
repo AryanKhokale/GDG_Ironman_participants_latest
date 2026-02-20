@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
-from .dependency import Base
+from core.dependency import Base
 
 
 class Submission(Base):

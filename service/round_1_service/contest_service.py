@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from models.contests import Contest
+from models.round_1.contests import Contest
 from datetime import date, datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 

@@ -2,6 +2,7 @@ import cloudinary.uploader
 import cloudinary.api
 import cloudinary
 from dotenv import load_dotenv
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import UploadFile
@@ -28,23 +29,63 @@ async def submit_round_5_service(
     for file in files:
         result = cloudinary.uploader.upload(
             file.file,
-            resource_type="auto"
+            resource_type="auto",
+            folder="round_3"
         )
-
         uploaded_urls.append(result["secure_url"])
 
-    # store as comma-separated OR JSON (depending on your model)
-    ppt_links = ",".join(uploaded_urls)
 
-    event = Round_5(
-        Team_Name=Team_Name,
-        abstract=abstract,
-        score_5=score_5,
-        ppt_link=ppt_links
+    # 2. Check if Team already exists
+    result = await db.execute(
+        select(Round_5).where(Round_5.Team_Name == Team_Name)
     )
 
-    db.add(event)
-    await db.commit()
-    await db.refresh(event)
+    existing_team = result.scalar_one_or_none()
 
-    return event, uploaded_urls
+
+    # 3. If exists → UPDATE
+    if existing_team:
+
+
+        existing_team.ppt_link = uploaded_urls[0]  # Assuming only one file for PPT
+        existing_team.abstract = abstract
+
+
+        await db.commit()
+        await db.refresh(existing_team)
+
+        return existing_team, uploaded_urls
+
+
+    
+
+
+
+    #uploaded_urls = []
+#
+    #for file in files:
+    #    result = cloudinary.uploader.upload(
+    #        file.file,
+    #        resource_type="auto"
+    #    )
+#
+    #    uploaded_urls.append(result["secure_url"])
+#
+    ## store as comma-separated OR JSON (depending on your model)
+    #ppt_links = ",".join(uploaded_urls)
+    
+    else :
+
+        event = Round_5(
+            Team_Name=Team_Name,
+            abstract=abstract,
+            score_5=score_5,
+            ppt_link=uploaded_urls[0]  # Assuming only one file for PPT
+        )
+    
+        db.add(event)
+        await db.commit()
+        await db.refresh(event)
+    
+        return event, uploaded_urls
+    

@@ -1,6 +1,4 @@
 from pydantic import BaseModel
-from typing import List, Dict, Any
-
 
 class Submission(BaseModel):
     Team_Name: str
@@ -8,7 +6,7 @@ class Submission(BaseModel):
     problem_id: int
     code: str
     status: str
-
+    score: int
 
 #submission_id = Column(Integer, primary_key=True, index=True)
 #

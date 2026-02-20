@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import UploadFile
@@ -16,17 +17,33 @@ async def submit_round_4_service(
     score_4: int,
 ):
     
-
-    event = Round_4(
-        Team_Name=Team_Name,
-        structured_submission=structured_submission,
-        status_4=status_4,
-        question=question,
-        score_4=score_4,
+    result = await db.execute(
+        select(Round_4).where(Round_4.Team_Name == Team_Name)
     )
 
-    db.add(event)
-    await db.commit()
-    await db.refresh(event)
+    existing_team = result.scalar_one_or_none()
 
-    return event
+
+    # 3. If exists → UPDATE
+    if existing_team:
+
+        existing_team.structured_submission = structured_submission
+
+        await db.commit()
+        await db.refresh(existing_team)
+        return existing_team
+    else:
+        
+        event = Round_4(
+            Team_Name=Team_Name,
+            structured_submission=structured_submission,
+            status_4=status_4,
+            question=question,
+            score_4=score_4,
+        )
+    
+        db.add(event)
+        await db.commit()
+        await db.refresh(event)
+    
+        return event
