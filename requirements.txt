@@ -7,3 +7,4 @@ fastapi
 uvicorn
 cloudinary
 requests
+python-multipart

@@ -39,7 +39,7 @@ async def submit_round_4_service(
             structured_submission=structured_submission,
             status_4=status_4,
             question=question,
-            score_4=score_4,
+            score_4=0,
         )
     
         db.add(event)

@@ -77,7 +77,7 @@ async def submit_round_3_service(
             ss_links_round_3=ss_links,
             description=description,
             status_3=status_3,
-            score_3=score_3
+            score_3=0
         )
 
         db.add(event)

@@ -59,19 +59,6 @@ async def submit_round_2_service(
 
         return existing_team, uploaded_urls
 
-
-    #uploaded_urls = []
-#
-    #for file in files:
-    #    result = cloudinary.uploader.upload(
-    #        file.file,
-    #        resource_type="auto"
-    #    )
-#
-    #    uploaded_urls.append(result["secure_url"])
-#
-    ## store as comma-separated OR JSON (depending on your model)
-    #ss_links = ",".join(uploaded_urls)
     else : 
         ss_links = ",".join(uploaded_urls)
         event = Round_2(
@@ -80,7 +67,7 @@ async def submit_round_2_service(
             hosted_link=hosted_link,
             ss_links=ss_links,
             status="Submitted",
-            score_2=score_2,
+            score_2=0,
         )
     
         db.add(event)

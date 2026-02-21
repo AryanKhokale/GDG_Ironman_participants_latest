@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from models.round_1.probelms import Problem
+from models.round_1.problems import Problem
 
 
 async def create_problem(

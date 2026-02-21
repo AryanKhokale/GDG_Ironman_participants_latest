@@ -56,30 +56,13 @@ async def submit_round_5_service(
 
         return existing_team, uploaded_urls
 
-
-    
-
-
-
-    #uploaded_urls = []
-#
-    #for file in files:
-    #    result = cloudinary.uploader.upload(
-    #        file.file,
-    #        resource_type="auto"
-    #    )
-#
-    #    uploaded_urls.append(result["secure_url"])
-#
-    ## store as comma-separated OR JSON (depending on your model)
-    #ppt_links = ",".join(uploaded_urls)
     
     else :
 
         event = Round_5(
             Team_Name=Team_Name,
             abstract=abstract,
-            score_5=score_5,
+            score_5=0,
             ppt_link=uploaded_urls[0]  # Assuming only one file for PPT
         )
     

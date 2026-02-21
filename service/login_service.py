@@ -1,8 +1,6 @@
 from sqlalchemy import select
-
 from models.leaderboard import Leaderboard
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.register_leaderboard import add_team_to_leaderboard
 
 
 async def login_service(db: AsyncSession, Team_Name: str):
