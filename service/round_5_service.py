@@ -6,15 +6,15 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import UploadFile
-
+from notify_admin import notify_admin
 load_dotenv()
 from models.round_5 import Round_5
 
 
 cloudinary.config(
-    cloud_name='dokzyijqo',
-    api_key='519149328713126',
-    api_secret='LLeSvMpg1xwzdvtPNp4w6dmTnvs'
+    cloud_name='dtlfa5z4v',
+    api_key='184463687267559',
+    api_secret='VZCZ6-rkcWAYNa_VcePE_ryopFA'
 )
 
 async def submit_round_5_service(
@@ -30,7 +30,6 @@ async def submit_round_5_service(
         result = cloudinary.uploader.upload(
             file.file,
             resource_type="auto",
-            folder="round_3"
         )
         uploaded_urls.append(result["secure_url"])
 
@@ -46,16 +45,7 @@ async def submit_round_5_service(
     # 3. If exists → UPDATE
     if existing_team:
 
-
-        existing_team.ppt_link = uploaded_urls[0]  # Assuming only one file for PPT
-        existing_team.abstract = abstract
-
-
-        await db.commit()
-        await db.refresh(existing_team)
-
-        return existing_team, uploaded_urls
-
+         return {"message": "Team has already submitted for Round 5. Please contact the admin if you want to update your submission."}
     
     else :
 
@@ -70,5 +60,8 @@ async def submit_round_5_service(
         await db.commit()
         await db.refresh(event)
     
-        return event, uploaded_urls
+        return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }
     

@@ -6,7 +6,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import UploadFile
-
 load_dotenv()
 from models.round_3 import Round_3
 
@@ -22,6 +21,12 @@ async def submit_round_3_service(
     score_3: int,
     files: List[UploadFile]
 ):
+    cloudinary.config(
+    cloud_name='dkq2hk958',
+    api_key='347234613443183',
+    api_secret='aEFOdN7sAlAJPprpWDMkDv1r2ys'
+)
+
 
     # 1. Upload new files
     uploaded_urls = []
@@ -46,24 +51,8 @@ async def submit_round_3_service(
     # 3. If exists → UPDATE
     if existing_team:
 
-        # Merge old + new file URLs
-      
-        all_urls =  uploaded_urls
-
-        existing_team.figma_links = figma_links
-        existing_team.description = description
-        existing_team.status_3 = status_3
-
-        # ADD score instead of replacing
-        existing_team.score_3 += score_3
-
-        # Update files
-        existing_team.ss_links_round_3 = ",".join(all_urls)
-
-        await db.commit()
-        await db.refresh(existing_team)
-
-        return existing_team, uploaded_urls
+        
+        return {"message": "Team has already submitted for Round 3. Please contact the admin if you want to update your submission."}
 
 
     # 4. If not exists → CREATE new record
@@ -77,11 +66,14 @@ async def submit_round_3_service(
             ss_links_round_3=ss_links,
             description=description,
             status_3=status_3,
-            score_3=0
+            score_3=score_3
         )
 
         db.add(event)
         await db.commit()
         await db.refresh(event)
 
-        return event, uploaded_urls
+        return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }

@@ -16,7 +16,7 @@ async def submit_round_5_endpoint(
     db: AsyncSession = Depends(get_db)
 ):
 
-    event, uploaded_urls = await submit_round_5_service(
+    event = await submit_round_5_service(
         db=db,
         Team_Name=Team_Name,
         abstract=abstract,
@@ -24,7 +24,4 @@ async def submit_round_5_endpoint(
         files=files
     )
 
-    return {
-        "message": "Submitted successfully",
-        "urls": uploaded_urls
-    }
+    return event

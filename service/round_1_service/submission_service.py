@@ -24,20 +24,8 @@ async def submission_service(
     # 3. If exists → UPDATE
     if existing_team:
 
-        existing_team.code = code
-        existing_team.status = status
-        await add_score(db, Team_Name, score)
-        await add_status(db, Team_Name, status)
-        await db.commit()
-        await db.refresh(existing_team)
-        return {"message": "Submission updated", "submission_id": existing_team.submission_id}
-    
-     
+        return {"message": "Team has already submitted for this problem. Please contact the admin if you want to update your submission."}
 
-    # Optional: check if contest exists
-    # (recommended if foreign key exists)
-
-    # Create problem object
     else:
             
         new_submission = Submission(

@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from typing import Annotated
+
+from fastapi import FastAPI, File, UploadFile
 from API.Middlewares.CORS import cors_middlewares
 from API.Routes.Reg_Login_API import router_x
 from API.Routes.round_1_API import router_1
@@ -18,3 +20,9 @@ app.include_router(router_3)
 app.include_router(router_4)
 app.include_router(router_5)
 app.include_router(router_x)
+
+@app.post("/upload")
+async def upload(
+    files: Annotated[list[UploadFile], File(...)]
+):
+    return {"filenames": [file.filename for file in files]}

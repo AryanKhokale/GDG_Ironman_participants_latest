@@ -22,5 +22,5 @@ async def get_leaderboard(db: AsyncSession = Depends(get_db)):
     return records
 
 @router_x.get("/login")
-async def login(Team_Name: str, db: AsyncSession = Depends(get_db)):
-    return await login_service(db=db, Team_Name=Team_Name)
+async def login(Team_Name: str, Leader_Email: str, db: AsyncSession = Depends(get_db)):
+    return await login_service(db=db, Team_Name=Team_Name, Leader_Email=Leader_Email)

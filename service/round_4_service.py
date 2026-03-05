@@ -3,7 +3,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import UploadFile
-
 load_dotenv()
 from models.round_4 import  Round_4
 
@@ -27,11 +26,7 @@ async def submit_round_4_service(
     # 3. If exists → UPDATE
     if existing_team:
 
-        existing_team.structured_submission = structured_submission
-
-        await db.commit()
-        await db.refresh(existing_team)
-        return existing_team
+        return {"message": "Team has already submitted for Round 4. Please contact the admin if you want to update your submission."}
     else:
         
         event = Round_4(

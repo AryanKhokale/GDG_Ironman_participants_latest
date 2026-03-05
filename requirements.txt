@@ -8,3 +8,4 @@ uvicorn
 cloudinary
 requests
 python-multipart
+httpx

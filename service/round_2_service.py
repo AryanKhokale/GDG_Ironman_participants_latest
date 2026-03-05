@@ -47,17 +47,7 @@ async def submit_round_2_service(
 
     if existing_team:
 
-        all_urls =  uploaded_urls
-
-        existing_team.git_hub_link = git_hub_link
-        existing_team.hosted_link = hosted_link
-        existing_team.status = status
-        existing_team.ss_links_round_3 = ",".join(all_urls)
-
-        await db.commit()
-        await db.refresh(existing_team)
-
-        return existing_team, uploaded_urls
+        return {"message": "Team has already submitted for Round 2. Please contact the admin if you want to update your submission."}
 
     else : 
         ss_links = ",".join(uploaded_urls)
@@ -74,5 +64,8 @@ async def submit_round_2_service(
         await db.commit()
         await db.refresh(event)
     
-        return event, uploaded_urls
+        return {
+        "message": "Submitted successfully",
+        "urls": uploaded_urls
+    }
     

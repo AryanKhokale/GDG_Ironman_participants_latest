@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, Form, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.db import get_db
 from service.round_2_service import submit_round_2_service
-
 router_2 = APIRouter()
 
 @router_2.post("/round_2")
@@ -15,7 +14,7 @@ async def submit_round_2_endpoint(
     db: AsyncSession = Depends(get_db)
 ):
 
-    event, uploaded_urls = await submit_round_2_service(
+    event = await submit_round_2_service(
         db=db,
         Team_Name=Team_Name,
         git_hub_link=git_hub_link,
@@ -25,7 +24,4 @@ async def submit_round_2_endpoint(
         files=files
     )
 
-    return {
-        "message": "Submitted successfully",
-        "urls": uploaded_urls
-    }
+    return event

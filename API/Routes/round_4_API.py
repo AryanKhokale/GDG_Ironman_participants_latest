@@ -22,7 +22,4 @@ async def submit_round_4_endpoint(
         score_4=round_4.score_4
     )
 
-    return {
-        "message": "Submitted successfully",
-        "event": event
-    }
+    return event

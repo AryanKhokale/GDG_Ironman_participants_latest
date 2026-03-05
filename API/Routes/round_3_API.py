@@ -1,4 +1,4 @@
-from typing import List
+from typing import Annotated, List
 from fastapi import APIRouter, Depends, Form, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.db import get_db
@@ -13,11 +13,11 @@ async def submit_round_3_endpoint(
     Team_Name: str = Form(...),
     figma_links: str = Form(...),
     description: str = Form(...),
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     db: AsyncSession = Depends(get_db)
 ):
 
-    event, uploaded_urls = await submit_round_3_service(
+    event = await submit_round_3_service(
         db=db,
         Team_Name=Team_Name,
         figma_links=figma_links,
@@ -28,7 +28,10 @@ async def submit_round_3_endpoint(
     )
 
    
-    return {
-        "message": "Submitted successfully",
-        "urls": uploaded_urls
-    }
+    return event
+
+@router_3.post("/debug_upload")
+async def debug_upload(
+    files: Annotated[list[UploadFile], File(..., media_type="multipart/form-data")]
+):
+    return {"count": len(files)}
