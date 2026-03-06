@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.db import get_db
 from service.leaderboard_service import get_records_desc
+from service.permission import permission_service
 from service.registration_service import registration_service
 from schemas.registration_schema import RegistrationCreate
 from service.login_service import login_service
@@ -24,3 +25,7 @@ async def get_leaderboard(db: AsyncSession = Depends(get_db)):
 @router_x.get("/login")
 async def login(Team_Name: str, Leader_Email: str, db: AsyncSession = Depends(get_db)):
     return await login_service(db=db, Team_Name=Team_Name, Leader_Email=Leader_Email)
+
+@router_x.get("/permission")
+async def get_permission(db: AsyncSession = Depends(get_db)):
+    return await permission_service(db=db, Role='admin')
